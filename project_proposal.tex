@@ -1,0 +1,93 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{amsmath}
+
+\title{\textbf{Project Proposal: Determinants of Household Stock Market Participation in Italy}}
+\author{Murtaza}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Motivation and Research Question}
+
+Understanding why households choose to invest in risky financial assets instead of keeping their wealth mainly in bank deposits is a central question in household finance. In Italy, household wealth is traditionally high, but participation in the stock market is limited compared with the level of savings. This creates an important puzzle: many households could benefit from long-run portfolio diversification, but only a minority directly or indirectly hold risky financial assets.
+
+This project asks the following research question:
+
+\begin{quote}
+\textbf{To what extent do household income and education predict the probability that an Italian household owns stocks or mutual funds?}
+\end{quote}
+
+The question is relevant for financial economics because it studies the relationship between socioeconomic characteristics and portfolio choice. It is also relevant for banks, investment platforms, and wealth management firms because it can help identify which groups are less likely to participate in financial markets.
+
+\section{Data}
+
+The main data source will be the \textbf{Survey on Household Income and Wealth (SHIW)}, conducted by the \textbf{Bank of Italy}. The SHIW is a household-level micro-dataset containing information on income, wealth, financial assets, demographic characteristics, and education. It is appropriate for this project because it provides both the dependent variable, financial market participation, and the main explanatory variables, household income and education.
+
+The dependent variable will be a binary indicator equal to one if the household owns stocks, mutual funds, or similar risky financial assets, and zero otherwise. The key explanatory variables will be household income and education. Control variables will include age of the household head, age squared, household size, and geographic region.
+
+\section{Methodology}
+
+The empirical analysis will use a probit model because the dependent variable is binary. The model is specified as:
+
+\[
+P(Y_i = 1 \mid X_i) =
+\Phi(\beta_0 + \beta_1 \log(\text{Income}_i)
++ \beta_2 \text{Education}_i + \gamma Z_i),
+\]
+
+where \(Y_i\) equals one if household \(i\) participates in the stock market and zero otherwise. \(\Phi\) is the standard normal cumulative distribution function. \(Z_i\) is a vector of control variables, including age, age squared, geographic region, and household size.
+
+The analysis will be conducted in \textbf{R}. The code estimates survey-weighted probit models using the \texttt{survey} package. In addition to regression coefficients, the project will report average partial effects, because marginal effects are easier to interpret than raw probit coefficients. For example, the results can show how much the probability of stock market participation changes when income increases or when a household moves from lower education to university education.
+
+\section{Expected Results}
+
+I expect income and education to have positive effects on the probability of stock market participation. Higher-income households are more likely to have savings available for investment and may be more willing to take financial risk. More educated households may have higher financial literacy, better access to financial information, and greater confidence in investment products.
+
+From a practical perspective, the project may identify a group of middle- or high-income households with low stock market participation. This group could represent an underserved market for financial advisory services and financial education.
+
+\section{Planned Outputs}
+
+The final project will include:
+
+\begin{itemize}[leftmargin=*]
+    \item descriptive statistics on income, education, and stock market participation;
+    \item participation rates by education level and geographic region;
+    \item probit regression estimates;
+    \item average partial effects for income and education;
+    \item graphs showing predicted participation probabilities by income and education.
+\end{itemize}
+
+\section{Time Table}
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+\textbf{Phase} & \textbf{Activity} & \textbf{Deadline} \\
+\midrule
+Phase 1 & Data acquisition and literature review & End of March \\
+Phase 2 & Data cleaning and variable construction in R & Mid-April \\
+Phase 3 & Econometric modeling and robustness checks & Late April \\
+Phase 4 & Final writing and formatting & Mid-May \\
+Final & Submission & Last day of class \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\section{Main Bibliography}
+
+\begin{itemize}[leftmargin=*]
+    \item Guiso, L., Haliassos, M., \& Jappelli, T. (2003). \textit{Household Stockholding in Europe: Where Do We Stand and Where Do We Go?}
+    \item Guiso, L., Sapienza, P., \& Zingales, L. (2008). Trusting the stock market. \textit{Journal of Finance}, 63(6), 2557--2600.
+    \item Campbell, J. Y. (2006). Household finance. \textit{Journal of Finance}, 61(4), 1553--1604.
+    \item Bank of Italy. \textit{Survey on Household Income and Wealth}.
+    \item Dalla Chiara, E. \textit{Introduction to R and STATA for Empirical Analysis}. CIDE.
+\end{itemize}
+
+\end{document}

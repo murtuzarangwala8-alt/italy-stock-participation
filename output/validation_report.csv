@@ -1,0 +1,26 @@
+check,value,status
+q22a: row count,9641,INFO
+q22a: unique household IDs,9641,INFO
+rfam22: row count,9641,INFO
+rfam22: unique household IDs,9641,INFO
+q22c2: row count,9641,INFO
+q22c2: unique household IDs,9641,INFO
+carcom22: row count,23057,INFO
+carcom22: unique household IDs,9641,INFO
+analysis_dataset: row count,9617,INFO
+analysis_dataset: unique household IDs,9617,INFO
+households in q22a missing from rfam22,0,PASS
+households in q22a missing from q22c2,0,PASS
+duplicate household heads in carcom22,0,PASS
+households missing a household head,0,PASS
+analysis income <= 0,0,PASS
+analysis weight <= 0,0,PASS
+analysis age outside 18-100,0,PASS
+analysis missing stock_participation,0,PASS
+analysis missing income,0,PASS
+analysis missing education,0,PASS
+analysis missing region,0,PASS
+analysis missing age,0,PASS
+analysis missing household_size,0,PASS
+analysis missing weight,0,PASS
+stock_participation matches raw asset columns,0,PASS

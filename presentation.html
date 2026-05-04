@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Household Stock Market Participation in Italy</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #0f1117;
+      color: #e8eaf0;
+      scroll-behavior: smooth;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px 24px;
+      background: linear-gradient(135deg, #0f1117 0%, #1a1f2e 60%, #0d2137 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(56,139,253,0.12) 0%, transparent 70%);
+      top: -100px; right: -100px;
+    }
+    .hero h1 {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      max-width: 800px;
+      background: linear-gradient(90deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero .subtitle {
+      margin-top: 16px;
+      font-size: 1.1rem;
+      color: #94a3b8;
+      max-width: 600px;
+    }
+    .hero .meta {
+      margin-top: 32px;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .stat-pill {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 16px 28px;
+      text-align: center;
+    }
+    .stat-pill .val {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+    .stat-pill .lbl {
+      font-size: 0.8rem;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    .scroll-hint {
+      margin-top: 48px;
+      color: #475569;
+      font-size: 0.85rem;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%,100% { transform: translateY(0); }
+      50%      { transform: translateY(6px); }
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+    section h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #f1f5f9;
+    }
+    section .section-desc {
+      color: #94a3b8;
+      margin-bottom: 40px;
+      max-width: 680px;
+      line-height: 1.6;
+    }
+    .divider {
+      border: none;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    /* ── CARDS GRID ── */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px 24px;
+    }
+    .card .card-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #64748b;
+      margin-bottom: 8px;
+    }
+    .card .card-val {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+    .card .card-sub {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-top: 6px;
+    }
+
+    /* ── CHART WRAPPERS ── */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 28px;
+    }
+    .chart-box {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 28px 24px;
+    }
+    .chart-box h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #cbd5e1;
+    }
+    .chart-box canvas { width: 100% !important; }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+    thead th {
+      text-align: left;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.06);
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    tbody tr { border-bottom: 1px solid rgba(255,255,255,0.05); }
+    tbody tr:hover { background: rgba(255,255,255,0.03); }
+    tbody td { padding: 12px 16px; color: #e2e8f0; }
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    .badge-sig   { background: rgba(52,211,153,0.15); color: #34d399; }
+    .badge-msig  { background: rgba(251,191,36,0.15); color: #fbbf24; }
+    .badge-nsig  { background: rgba(148,163,184,0.1);  color: #94a3b8; }
+
+    /* ── APE BARS ── */
+    .ape-list { display: flex; flex-direction: column; gap: 18px; }
+    .ape-item .ape-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      font-size: 0.9rem;
+    }
+    .ape-item .ape-label { color: #cbd5e1; }
+    .ape-item .ape-pct   { color: #60a5fa; font-weight: 700; }
+    .ape-track {
+      height: 8px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+    .ape-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+      transition: width 1s ease;
+    }
+
+    /* ── INSIGHT BOX ── */
+    .insight {
+      background: linear-gradient(135deg, rgba(59,130,246,0.1), rgba(139,92,246,0.1));
+      border: 1px solid rgba(99,102,241,0.3);
+      border-radius: 16px;
+      padding: 32px;
+      line-height: 1.7;
+      color: #cbd5e1;
+    }
+    .insight strong { color: #a5b4fc; }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: #334155;
+      font-size: 0.8rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════════ HERO -->
+<div class="hero">
+  <h1>Determinants of Household Stock Market Participation in Italy</h1>
+  <p class="subtitle">
+    Do income and education predict whether Italian households invest in stocks or mutual funds?
+    Evidence from the 2022 Survey on Household Income and Wealth (SHIW).
+  </p>
+  <div class="meta">
+    <div class="stat-pill">
+      <div class="val">9,617</div>
+      <div class="lbl">Households surveyed</div>
+    </div>
+    <div class="stat-pill">
+      <div class="val">12.0%</div>
+      <div class="lbl">Overall participation rate</div>
+    </div>
+    <div class="stat-pill">
+      <div class="val">€37,431</div>
+      <div class="lbl">Median household income</div>
+    </div>
+    <div class="stat-pill">
+      <div class="val">59.2 yrs</div>
+      <div class="lbl">Mean age of household head</div>
+    </div>
+  </div>
+  <div class="scroll-hint">↓ scroll to explore</div>
+</div>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════════ DESCRIPTIVE -->
+<section>
+  <h2>Descriptive Evidence</h2>
+  <p class="section-desc">
+    Participation rates and median incomes vary sharply across education levels and Italian regions —
+    even before any regression controls.
+  </p>
+
+  <div class="chart-grid">
+
+    <div class="chart-box">
+      <h3>Participation Rate by Education Level</h3>
+      <canvas id="chartEduPart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h3>Median Income by Education Level (€)</h3>
+      <canvas id="chartEduInc"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h3>Participation Rate by Region</h3>
+      <canvas id="chartRegPart"></canvas>
+    </div>
+
+    <div class="chart-box">
+      <h3>Median Income by Region (€)</h3>
+      <canvas id="chartRegInc"></canvas>
+    </div>
+
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════════ APE -->
+<section>
+  <h2>Average Partial Effects</h2>
+  <p class="section-desc">
+    How much does each variable shift the probability of stock market participation,
+    evaluated at the average household?
+  </p>
+
+  <div class="ape-list">
+    <div class="ape-item">
+      <div class="ape-header">
+        <span class="ape-label">+1 unit in log(income)</span>
+        <span class="ape-pct">+12.5 pp</span>
+      </div>
+      <div class="ape-track"><div class="ape-fill" style="width:91.8%"></div></div>
+    </div>
+    <div class="ape-item">
+      <div class="ape-header">
+        <span class="ape-label">University vs Primary or less</span>
+        <span class="ape-pct">+13.6 pp</span>
+      </div>
+      <div class="ape-track"><div class="ape-fill" style="width:100%"></div></div>
+    </div>
+    <div class="ape-item">
+      <div class="ape-header">
+        <span class="ape-label">Upper secondary vs Primary or less</span>
+        <span class="ape-pct">+8.7 pp</span>
+      </div>
+      <div class="ape-track"><div class="ape-fill" style="width:63.9%"></div></div>
+    </div>
+    <div class="ape-item">
+      <div class="ape-header">
+        <span class="ape-label">Lower secondary vs Primary or less</span>
+        <span class="ape-pct">+4.0 pp</span>
+      </div>
+      <div class="ape-track"><div class="ape-fill" style="width:29.3%"></div></div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════════ PROBIT TABLE -->
+<section>
+  <h2>Probit Regression Results</h2>
+  <p class="section-desc">
+    Main model: Pr(stock participation = 1) = Φ(β₀ + β₁ log income + β₂ education + controls).
+    All three outcome models shown below.
+  </p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Variable</th>
+          <th>Stock Participation</th>
+          <th>Mutual Fund / ETF</th>
+          <th>Direct Listed Stock</th>
+          <th>Significance</th>
+        </tr>
+      </thead>
+      <tbody id="probitBody"></tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════════ CHARTS PROBIT -->
+<section>
+  <h2>Coefficient Comparison Across Models</h2>
+  <p class="section-desc">
+    Probit coefficients for the three outcome variables side by side.
+    All key predictors are positive and statistically significant.
+  </p>
+  <div class="chart-box" style="max-width:800px">
+    <h3>Probit Coefficients (excluding intercept)</h3>
+    <canvas id="chartCoef"></canvas>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<!-- ══════════════════════════════════════════════ INSIGHT -->
+<section>
+  <h2>Key Takeaway</h2>
+  <div class="insight">
+    Stock market participation in Italy is <strong>strongly segmented by socioeconomic status</strong>.
+    Higher income raises participation because richer households have more savings after consumption.
+    Higher education raises participation through <strong>financial literacy, information access, and
+    confidence</strong> in investment products.<br /><br />
+    The findings point to an <strong>underserved group</strong>: households with moderate-to-high income
+    but lower education. These households may have sufficient resources to invest but face
+    informational barriers or low financial confidence. Simplified investment products and
+    targeted financial education could meaningfully increase participation among this group.
+  </div>
+</section>
+
+<footer>
+  Data: Bank of Italy — Survey on Household Income and Wealth (SHIW) 2022 &nbsp;·&nbsp;
+  Probit models estimated with survey weights
+</footer>
+
+<script>
+  /* ── shared chart defaults ── */
+  Chart.defaults.color = '#94a3b8';
+  Chart.defaults.borderColor = 'rgba(255,255,255,0.07)';
+
+  const blue   = 'rgba(96,165,250,0.85)';
+  const purple = 'rgba(167,139,250,0.85)';
+  const teal   = 'rgba(52,211,153,0.85)';
+  const amber  = 'rgba(251,191,36,0.85)';
+
+  function barChart(id, labels, datasets, opts = {}) {
+    new Chart(document.getElementById(id), {
+      type: 'bar',
+      data: { labels, datasets },
+      options: {
+        responsive: true,
+        plugins: { legend: { display: datasets.length > 1 } },
+        scales: {
+          x: { grid: { color: 'rgba(255,255,255,0.05)' } },
+          y: { grid: { color: 'rgba(255,255,255,0.05)' }, ...opts.y }
+        }
+      }
+    });
+  }
+
+  /* ── education charts ── */
+  const eduLabels = ['Primary or less', 'Lower secondary', 'Upper secondary', 'University'];
+  const eduPart   = [2.30, 6.51, 14.10, 27.76];
+  const eduInc    = [20303, 26846, 40307, 69419];
+
+  barChart('chartEduPart', eduLabels,
+    [{ label: 'Participation %', data: eduPart, backgroundColor: [blue,blue,blue,purple], borderRadius: 6 }],
+    { y: { ticks: { callback: v => v + '%' } } }
+  );
+  barChart('chartEduInc', eduLabels,
+    [{ label: 'Median Income €', data: eduInc, backgroundColor: [teal,teal,teal,amber], borderRadius: 6 }],
+    { y: { ticks: { callback: v => '€' + v.toLocaleString() } } }
+  );
+
+  /* ── region charts ── */
+  const regLabels = ['North', 'Centre', 'South & Islands'];
+  const regPart   = [18.41, 12.26, 2.26];
+  const regInc    = [45117, 40247, 29769];
+
+  barChart('chartRegPart', regLabels,
+    [{ label: 'Participation %', data: regPart, backgroundColor: [blue, purple, teal], borderRadius: 6 }],
+    { y: { ticks: { callback: v => v + '%' } } }
+  );
+  barChart('chartRegInc', regLabels,
+    [{ label: 'Median Income €', data: regInc, backgroundColor: [blue, purple, teal], borderRadius: 6 }],
+    { y: { ticks: { callback: v => '€' + v.toLocaleString() } } }
+  );
+
+  /* ── probit table ── */
+  const probitData = [
+    { term: 'Intercept',                    sp: -9.552, mf: -8.738, dl: -9.320, p: 0 },
+    { term: 'Log income',                   sp:  0.807, mf:  0.715, dl:  0.717, p: 0 },
+    { term: 'Age (centered)',               sp:  0.004, mf:  0.003, dl:  0.007, p: 0.004 },
+    { term: 'Age² (centered)',              sp: -0.001, mf: -0.001, dl: -0.001, p: 0.003 },
+    { term: 'Household size',               sp: -0.192, mf: -0.169, dl: -0.130, p: 0 },
+    { term: 'Female head',                  sp: -0.246, mf: -0.233, dl: -0.174, p: 0 },
+    { term: 'Education: Lower secondary',   sp:  0.393, mf:  0.356, dl:  0.258, p: 0.00002 },
+    { term: 'Education: Upper secondary',   sp:  0.705, mf:  0.661, dl:  0.517, p: 0 },
+    { term: 'Education: University',        sp:  0.956, mf:  0.847, dl:  0.851, p: 0 },
+    { term: 'Region: Centre',               sp: -0.222, mf: -0.270, dl: -0.117, p: 0.000000006 },
+    { term: 'Region: South & Islands',      sp: -0.893, mf: -0.906, dl: -0.688, p: 0 },
+  ];
+
+  function sigBadge(p) {
+    if (p < 0.001) return '<span class="badge badge-sig">p &lt; 0.001</span>';
+    if (p < 0.05)  return '<span class="badge badge-msig">p &lt; 0.05</span>';
+    return '<span class="badge badge-nsig">n.s.</span>';
+  }
+
+  const tbody = document.getElementById('probitBody');
+  probitData.forEach(r => {
+    tbody.innerHTML += `<tr>
+      <td>${r.term}</td>
+      <td>${r.sp.toFixed(3)}</td>
+      <td>${r.mf.toFixed(3)}</td>
+      <td>${r.dl.toFixed(3)}</td>
+      <td>${sigBadge(r.p)}</td>
+    </tr>`;
+  });
+
+  /* ── coefficient comparison chart (no intercept) ── */
+  const coefData = probitData.filter(r => r.term !== 'Intercept');
+  new Chart(document.getElementById('chartCoef'), {
+    type: 'bar',
+    data: {
+      labels: coefData.map(r => r.term),
+      datasets: [
+        { label: 'Stock Participation', data: coefData.map(r => r.sp), backgroundColor: blue,   borderRadius: 4 },
+        { label: 'Mutual Fund / ETF',   data: coefData.map(r => r.mf), backgroundColor: purple, borderRadius: 4 },
+        { label: 'Direct Listed Stock', data: coefData.map(r => r.dl), backgroundColor: teal,   borderRadius: 4 },
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'top' } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { maxRotation: 35 } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' } }
+      }
+    }
+  });
+</script>
+</body>
+</html>

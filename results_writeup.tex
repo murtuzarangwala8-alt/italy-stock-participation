@@ -1,0 +1,41 @@
+\section{Empirical Results}
+
+The final analysis uses 9,617 households from the 2022 Survey on Household Income and Wealth. The dependent variable is equal to one if the household owns common funds, ETFs, listed shares, unlisted shares, or foreign financial securities. Using the household sampling weights, the estimated stock market participation rate is 11.97 percent.
+
+\subsection{Descriptive Evidence}
+
+Stock market participation rises strongly with education. Among households whose head has primary education or less, the weighted participation rate is 2.30 percent. It rises to 6.51 percent for lower secondary education, 14.10 percent for upper secondary education, and 27.76 percent for university education. Median income also rises sharply across education groups, from about EUR 20,303 among the lowest education group to about EUR 69,419 among university-educated households.
+
+This descriptive pattern already supports the main hypothesis: households with higher income and higher education are more likely to participate in financial markets.
+
+\subsection{Probit Results}
+
+The probit regression confirms the descriptive evidence. The coefficient on log household income is positive and statistically significant. This means that, holding education and demographic controls constant, higher-income households have a higher probability of owning risky financial assets.
+
+Education is also positive and statistically significant. Relative to households with primary education or less, households with lower secondary, upper secondary, and university education all have higher predicted probabilities of market participation. The effect is largest for university education.
+
+The average partial effects make the results easier to interpret. A one-unit increase in log income is associated with an increase of about 12.49 percentage points in the probability of stock market participation. Compared with households whose head has primary education or less, the estimated participation probability is higher by:
+
+\begin{itemize}
+    \item 3.98 percentage points for lower secondary education;
+    \item 8.70 percentage points for upper secondary education;
+    \item 13.61 percentage points for university education.
+\end{itemize}
+
+The control variables also matter. Participation is lower in the Centre and especially in the South and Islands compared with the North. Female-headed households and larger households have lower estimated participation probabilities. Age has a nonlinear effect, suggesting that participation increases with age up to a point and then declines.
+
+\subsection{Interpretation}
+
+The results suggest that stock market participation in Italy is strongly segmented by socioeconomic status. Income likely matters because richer households have more savings available after basic consumption needs. Education likely matters because it is related to financial literacy, access to information, and confidence in using investment products.
+
+From a consulting and wealth-management perspective, the findings point to an underserved group: households with moderate or high income but lower education. These households may have enough resources to invest but may face informational barriers, low financial confidence, or limited trust in financial markets. Financial advisory services, simplified investment products, and financial education programs could increase participation among this group.
+
+\subsection{Figures}
+
+The analysis produces two figures:
+
+\begin{itemize}
+    \item \texttt{output/participation\_by\_education.png}, showing actual participation rates by education level;
+    \item \texttt{output/predicted\_probability\_by\_income\_education.png}, showing predicted participation probabilities by income and education.
+\end{itemize}
+
