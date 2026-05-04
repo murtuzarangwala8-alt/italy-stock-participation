@@ -1,22 +1,42 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-    <title>Interactive Presentation</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        h1 { color: #333; }
-        #presentation { border: 1px solid #ccc; padding: 20px; }
-    </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Household Stock Market Participation in Italy</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
 </head>
 <body>
-    <div id="presentation">
-        <h1>Welcome to the Interactive Presentation</h1>
-        <p>Click the button below to start!</p>
-        <button onclick="startPresentation()">Start Presentation</button>
-    </div>
+    <header>
+        <h1>Household Stock Market Participation in Italy</h1>
+    </header>
+    <section>
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </section>
     <script>
-        function startPresentation() {
-            alert('Presentation Started!');
-        }
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['2018', '2019', '2020', '2021', '2022'],
+                datasets: [{
+                    label: 'Participation Rate',
+                    data: [10, 15, 12, 18, 22],
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 2,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
     </script>
 </body>
 </html>
